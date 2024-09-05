@@ -24,7 +24,7 @@ export default function RoomScreen() {
     .catch(error => {
       console.log(error);
     });
-  });
+  }, []);
   
   return(
     <View>
