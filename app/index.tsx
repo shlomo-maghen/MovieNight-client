@@ -1,14 +1,18 @@
-import { Link } from 'expo-router';
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Link, router } from 'expo-router';
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function Home() {
   initialSetup();
-  
+
   return (
     <View style={styles.container}>
-      <Button title="Create a room" onPress={() => createRoom()} />
-      <Link href="/room" asChild>
-        <Button title="Join a room" />
+      <Pressable style={styles.button} onPress={() => createRoom()}>
+        <Text>Create a room</Text>
+      </Pressable>
+      <Link href="/join-room-modal" style={styles.button} asChild>
+        <Pressable>
+          <Text>Join a room</Text>
+        </Pressable>
       </Link>
     </View>
   );
@@ -18,9 +22,19 @@ const initialSetup = () => {
 }
 
 const createRoom = () => {
-  fetch("localhost:8000/rooms", {
+  console.log("creating a room...");
+  fetch(process.env.EXPO_PUBLIC_BACKEND_URL + "/rooms", {
     method: "POST",
-  }).catch(error => {
+  })
+  .then(response => response.json())
+  .then(response => {
+    console.log(response);
+    if (response["success"]) {
+      console.log("created room successfully");
+      router.push(`/room/${response["room_id"]}`);
+    }
+  })
+  .catch(error => {
     console.error(error);
   });
 }
@@ -32,4 +46,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  button: {
+    width: 270,
+    height: 60,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10
+  }
 });
