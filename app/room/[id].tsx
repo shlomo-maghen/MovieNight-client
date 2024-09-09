@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { router, useLocalSearchParams } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import { Link, router, useLocalSearchParams } from 'expo-router';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { fetchRoom } from '@/util/network';
 import Room from '@/models/Room';
 
@@ -9,8 +9,8 @@ export default function RoomScreen() {
 
   const { id } = useLocalSearchParams<{ id: string }>();
   const [room, setRoom] = useState<Room>();
-
-  useEffect(() => {
+  
+  const fetch = () => {
     fetchRoom(id)
       .then(response => {
         if (response["success"]) {
@@ -24,17 +24,33 @@ export default function RoomScreen() {
       .catch(error => {
         console.log(error);
       });
-  }, []);
+  }
 
+  useEffect(() => {
+    fetch()
+    const interval = setInterval(fetch, 2000);
+    return () => {
+      clearInterval(interval);
+    }
+  }, [])
+  
   return (
     <View>
       {room ? getJsx(room) : (<Text>Loading...</Text>)}
+      <Link href="/room/add-movie-modal" asChild>
+        <Pressable>
+          <Text>Add movie</Text>
+        </Pressable>
+      </Link>
+      
     </View>
   )
 }
 
+
+
 const getJsx = (room: Room) => {
-  const movies = room.movies.map(movie => 
+  const movies = room.movies.map(movie =>
     <Text style={styles.movieItem} key={`${movie["movie_id"]}_${movie["user_id"]}`}>
       Movie ID: {movie["movie_id"]} added by {movie["user_id"]}
     </Text>
@@ -43,7 +59,7 @@ const getJsx = (room: Room) => {
     <>
       <Text style={styles.roomId}>Room id: {room.id}</Text>
       {movies}
-    </>  
+    </>
   )
 }
 

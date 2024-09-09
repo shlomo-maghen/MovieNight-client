@@ -14,6 +14,11 @@ export default function Home() {
           <Text>Join a room</Text>
         </Pressable>
       </Link>
+      <Link href="/room/XFAMU" style={styles.button} asChild>
+        <Pressable>
+          <Text>XFAMU</Text>
+        </Pressable>
+      </Link>
     </View>
   );
 }
