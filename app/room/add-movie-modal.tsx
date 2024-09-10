@@ -6,7 +6,7 @@ import { router } from 'expo-router';
 export default function AddMovieModal() {
   const [movieId, setMovieId] = useState("");
 
-  const add = () => {
+  const addMovie = () => {
     addMovieToRoom("XFAMU", movieId, "3")
       .then(response => {
         if(response["success"]) {
@@ -24,7 +24,7 @@ export default function AddMovieModal() {
         onChangeText={(text) => setMovieId(text)}>
       </TextInput>
 
-      <Pressable onPress={add}>
+      <Pressable onPress={addMovie}>
         <Text>Add</Text>
       </Pressable>
 
