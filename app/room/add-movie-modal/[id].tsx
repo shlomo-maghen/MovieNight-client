@@ -1,19 +1,28 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { addMovieToRoom } from '@/util/network';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
+import { getUser } from '@/util/user';
 
 export default function AddMovieModal() {
+
+  const { id } = useLocalSearchParams<{ id: string }>();
+
   const [movieId, setMovieId] = useState("");
 
   const addMovie = () => {
-    addMovieToRoom("XFAMU", movieId, "3")
-      .then(response => {
-        if(response["success"]) {
-          alert("added");
-          router.back();
-        }
-      })
+    getUser()
+      .then(user => {
+        console.log("got user", user);
+        addMovieToRoom(id, movieId, user)
+          .then(response => {
+            console.log("response", response)
+            if (response["success"]) {
+              router.navigate(`/room/${id}`);
+            }
+          })
+      });
+
   }
 
   return (

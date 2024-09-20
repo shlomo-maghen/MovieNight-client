@@ -6,16 +6,18 @@ export const fetchRoom = async (id: string) => {
 
 export const addMovieToRoom = async (roomId: string, movieId: string, userId: string) => {
   let url = process.env.EXPO_PUBLIC_BACKEND_URL + "/room_movie/";
+  const body = JSON.stringify({
+    room_id: roomId,
+    movie_id: movieId,
+    user_id: userId,
+  })
+  console.log(body)
   const response = await fetch(url, {
     method: "POST",
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      room_id: roomId,
-      movie_id: movieId,
-      user_id: userId,
-    })
+    body: body
   });
   return await response.json();
 }

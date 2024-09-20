@@ -36,18 +36,10 @@ export default function RoomScreen() {
   
   return (
     <View>
-      {room ? getJsx(room) : (<Text>Loading...</Text>)}
-      <Link href="/room/add-movie-modal" asChild>
-        <Pressable>
-          <Text>Add movie</Text>
-        </Pressable>
-      </Link>
-      
+      {room ? getJsx(room) : (<Text>Loading...</Text>)}      
     </View>
   )
 }
-
-
 
 const getJsx = (room: Room) => {
   const movies = room.movies.map(movie =>
@@ -59,6 +51,11 @@ const getJsx = (room: Room) => {
     <>
       <Text style={styles.roomId}>Room id: {room.id}</Text>
       {movies}
+      <Link href={`/room/add-movie-modal/${room.id}`} asChild>
+        <Pressable>
+          <Text>Add movie</Text>
+        </Pressable>
+      </Link>
     </>
   )
 }

@@ -1,5 +1,5 @@
 import { getUser } from '@/util/user';
-import { StrictMode, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, View } from "react-native";
 import Register from './register';
 import Main from './main';
