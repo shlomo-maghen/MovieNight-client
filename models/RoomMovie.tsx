@@ -1,12 +1,19 @@
-export default class Movie {
-  title: string
-  user: string
-  constructor(title: string, user: string) {
-    this.title = title;
+import User from "./User";
+
+export default class RoomMovie {
+  id: string
+  user: User
+  constructor(id: string, user: User) {
+    this.id = id;
     this.user = user;
   }
 }
 
-export const fromJson = (json: {movie_id: string, user_id: string}) : Movie => {
-  return new Movie(json.movie_id, json.user_id)
+export const fromJson = (
+  json: {
+    movie_id: string,
+    user_id: string,
+    user_display_name: string
+  }): RoomMovie => {
+  return new RoomMovie(json.movie_id, new User(json.user_id, json.user_display_name))
 }

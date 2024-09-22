@@ -1,18 +1,28 @@
+import User from '@/models/User';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as crypto from 'expo-crypto';
 
-export const getUser = async () => {
+const userIdKey = "USER_ID"
+const userDisplayNameKey = "USER_DISPLAY_NAME"
+
+export const getUser = async () : Promise<User> => {
   try {
-    const user = await AsyncStorage.getItem('username');
-    return user;
+    const userId = await AsyncStorage.getItem(userIdKey);
+    const userDisplayName = await AsyncStorage.getItem(userDisplayNameKey);
+    if (userId && userDisplayName) {
+      return new User(userId, userDisplayName);
+    }
   } catch(e) {
     console.log(e);
   }
-  return "";
+  return new User("", "");
 }
 
-export const setUser = async (username: string) => {
+export const setUser = async (userDisplayName: string) => {
   try {
-    await AsyncStorage.setItem('username', username);
+    const userId = crypto.randomUUID();
+    await AsyncStorage.setItem(userIdKey, userId);
+    await AsyncStorage.setItem(userDisplayNameKey, userDisplayName);
   } catch(e) {
     console.log(e);
   }
@@ -20,7 +30,8 @@ export const setUser = async (username: string) => {
 
 export const clearUser = async () => {
   try {
-    await AsyncStorage.removeItem('username');
+    await AsyncStorage.removeItem(userIdKey);
+    await AsyncStorage.removeItem(userDisplayNameKey);
   } catch(e) {
     console.log(e);
   }

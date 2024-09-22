@@ -7,7 +7,7 @@ import { StyleSheet, View } from "react-native";
 export default function Home() {
   const [username, setUsername] = useState<string | null>();
 
-  getUser().then(username => setUsername(username));
+  getUser().then(user => setUsername(user.displayName));
 
   return (
     <View style={styles.container}>

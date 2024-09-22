@@ -21,9 +21,9 @@ export default function Main() {
           <Text>Join a room</Text>
         </Pressable>
       </Link>
-      <Link href="/room/XFAMU" style={styles.button} asChild>
+      <Link href="/room/WBAKM" style={styles.button} asChild>
         <Pressable>
-          <Text>XFAMU</Text>
+          <Text>WBAKM</Text>
         </Pressable>
       </Link>
       <Pressable

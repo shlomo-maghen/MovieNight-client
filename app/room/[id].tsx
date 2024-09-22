@@ -14,14 +14,18 @@ export default function RoomScreen() {
   const [room, setRoom] = useState<Room>();
   const [currentUser, setCurrentUser] = useState<string | null>();
 
-  getUser().then(username => setCurrentUser(username));
+  getUser().then(user => setCurrentUser(user.displayName));
   
   const fetch = () => {
     fetchRoom(id)
       .then(response => {
         if (response["success"]) {
           console.log("fetch room success");
-          setRoom(new Room(response["room_id"], response["movies"].map(movieJson => fromJson(movieJson))));
+          setRoom(
+            new Room(
+              response["room_id"],
+              response["movies"]
+                .map(movieJson => fromJson(movieJson))));
         } else {
           alert("room not found");
           router.back();

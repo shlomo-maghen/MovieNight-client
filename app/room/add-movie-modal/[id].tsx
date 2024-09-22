@@ -18,10 +18,12 @@ export default function AddMovieModal() {
         }
         addMovieToRoom(id, movieId, user)
           .then(response => {
+            console.log(response)
             if (response["success"]) {
               router.navigate(`/room/${id}`);
             }
           })
+          .catch(e => console.log(e))
       });
 
   }

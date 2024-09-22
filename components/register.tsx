@@ -8,7 +8,7 @@ export default function Register() {
 
   return (
     <View style={styles.container}>
-      <Text>Name: </Text>
+      <Text>Display name: </Text>
 
     <TextInput
       onChangeText={text => setUsername(text.trim())}>
