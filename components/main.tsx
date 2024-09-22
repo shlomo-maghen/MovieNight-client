@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Link, router } from 'expo-router';
 import { clearUser } from '@/util/user';
-import { createRoom } from '@/util/room';
+import { createRoom } from '@/util/network';
 
 export default function Main() {
 

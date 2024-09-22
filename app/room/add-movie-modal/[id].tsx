@@ -13,10 +13,11 @@ export default function AddMovieModal() {
   const addMovie = () => {
     getUser()
       .then(user => {
-        console.log("got user", user);
+        if (!user) {
+          return
+        }
         addMovieToRoom(id, movieId, user)
           .then(response => {
-            console.log("response", response)
             if (response["success"]) {
               router.navigate(`/room/${id}`);
             }

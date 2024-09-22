@@ -1,21 +1,27 @@
 import { useEffect, useState } from 'react';
-import { Link, router, useLocalSearchParams } from 'expo-router';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
+import { Text, View } from 'react-native';
 import { fetchRoom } from '@/util/network';
 import Room from '@/models/Room';
+import { fromJson } from '@/models/RoomMovie';
+import MovieRoom from '@/components/MovieRoom';
+import { getUser } from '@/util/user';
 
 
 export default function RoomScreen() {
 
   const { id } = useLocalSearchParams<{ id: string }>();
   const [room, setRoom] = useState<Room>();
+  const [currentUser, setCurrentUser] = useState<string | null>();
+
+  getUser().then(username => setCurrentUser(username));
   
   const fetch = () => {
     fetchRoom(id)
       .then(response => {
         if (response["success"]) {
           console.log("fetch room success");
-          setRoom(new Room(response["room_id"], response["movies"]));
+          setRoom(new Room(response["room_id"], response["movies"].map(movieJson => fromJson(movieJson))));
         } else {
           alert("room not found");
           router.back();
@@ -36,37 +42,10 @@ export default function RoomScreen() {
   
   return (
     <View>
-      {room ? getJsx(room) : (<Text>Loading...</Text>)}      
+      {room && currentUser ? 
+        <MovieRoom room={room} currentUser={currentUser} /> : 
+        (<Text>Loading...</Text>)}      
     </View>
   )
 }
 
-const getJsx = (room: Room) => {
-  const movies = room.movies.map(movie =>
-    <Text style={styles.movieItem} key={`${movie["movie_id"]}_${movie["user_id"]}`}>
-      Movie ID: {movie["movie_id"]} added by {movie["user_id"]}
-    </Text>
-  )
-  return (
-    <>
-      <Text style={styles.roomId}>Room id: {room.id}</Text>
-      {movies}
-      <Link href={`/room/add-movie-modal/${room.id}`} asChild>
-        <Pressable>
-          <Text>Add movie</Text>
-        </Pressable>
-      </Link>
-    </>
-  )
-}
-
-const styles = StyleSheet.create({
-  roomId: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    margin: 10,
-  },
-  movieItem: {
-    margin: 10
-  },
-});

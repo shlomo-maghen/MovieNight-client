@@ -1,8 +1,8 @@
+import Main from '@/components/Main';
+import Register from '@/components/Register';
 import { getUser } from '@/util/user';
 import { useState } from 'react';
 import { StyleSheet, View } from "react-native";
-import Register from '../components/register';
-import Main from '../components/main';
 
 export default function Home() {
   const [username, setUsername] = useState<string | null>();
