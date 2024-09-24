@@ -2,37 +2,35 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type MovieItemProps = {
   title: string,
-  usernames: string[]
+  displayNames: string[],
+  currentUserVoted: boolean,
+  voteAction: () => void,
 }
 
 export default function MovieItem(props: MovieItemProps) {
-  // const userVotedForMovie = props.currentUser.id == props.
+
+  const votePressable = (props.currentUserVoted) ?
+    <Pressable
+      style={styles.vote}
+      onPress={props.voteAction}>
+      <Text>DOWNVOTE</Text>
+    </Pressable>
+    :
+    <Pressable
+      style={styles.vote}
+      onPress={props.voteAction}>
+      <Text>UPVOTE</Text>
+    </Pressable>
   return (
     <>
       <View style={styles.movieRow}>
-        <View style={styles.movieTitle}>
-          <Text>
-            {props.title}
-          </Text>
-        </View>
-
-        <View style={styles.voteGroup}>
-          <Pressable
-            style={styles.vote}
-            onPress={() => console.log("votes up movie", props.title)}>
-            <Text>UPVOTE</Text>
-          </Pressable>
-          <Pressable
-            style={styles.vote}
-            onPress={() => console.log("votes down movie", props.title)}>
-            <Text>DOWNVOTE</Text>
-          </Pressable>
-        </View>
-
-
+        <Text style={styles.movieTitle}>
+          {props.title}
+        </Text>
+        {votePressable}
       </View>
       <Text style={styles.userRow}>
-        {props.usernames.join(", ")}
+        {props.displayNames.join(", ")}
       </Text>
     </>
   )
@@ -50,13 +48,11 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 20,
   },
-  voteGroup: {
+  vote: {
+    paddingLeft: 16,
     justifyContent: "flex-end",
     textAlign: "center",
     flexDirection: "row"
-  },
-  vote: {
-    paddingLeft: 16
   },
   userRow: {
     paddingLeft: 16,

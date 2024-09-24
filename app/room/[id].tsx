@@ -6,16 +6,20 @@ import Room from '@/models/Room';
 import { fromJson } from '@/models/RoomMovie';
 import MovieRoom from '@/components/MovieRoom';
 import { getUser } from '@/util/user';
+import User from '@/models/User';
 
 
 export default function RoomScreen() {
-
+  const pollTime = 2000;
   const { id } = useLocalSearchParams<{ id: string }>();
   const [room, setRoom] = useState<Room>();
-  const [currentUser, setCurrentUser] = useState<string | null>();
+  const [currentUser, setCurrentUser] = useState<User | null>();
 
-  getUser().then(user => setCurrentUser(user.displayName));
-  
+  useEffect(() => {
+    getUser().then(user => { setCurrentUser(user) });
+  }, [])
+
+
   const fetch = () => {
     fetchRoom(id)
       .then(response => {
@@ -38,17 +42,17 @@ export default function RoomScreen() {
 
   useEffect(() => {
     fetch()
-    const interval = setInterval(fetch, 2000);
+    const interval = setInterval(fetch, pollTime);
     return () => {
       clearInterval(interval);
     }
   }, [])
-  
+
   return (
     <View>
-      {room && currentUser ? 
-        <MovieRoom room={room} currentUser={currentUser} /> : 
-        (<Text>Loading...</Text>)}      
+      {room && currentUser ?
+        <MovieRoom room={room} currentUser={currentUser} /> :
+        (<Text>Loading...</Text>)}
     </View>
   )
 }
