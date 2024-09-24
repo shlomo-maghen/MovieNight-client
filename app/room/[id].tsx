@@ -10,7 +10,7 @@ import User from '@/models/User';
 
 
 export default function RoomScreen() {
-  const pollTime = 2000;
+  const pollTime = 5000;
   const { id } = useLocalSearchParams<{ id: string }>();
   const [room, setRoom] = useState<Room>();
   const [currentUser, setCurrentUser] = useState<User | null>();

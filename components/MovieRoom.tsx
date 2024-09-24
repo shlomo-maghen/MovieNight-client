@@ -42,8 +42,8 @@ export default function MovieRoom(props: MovieRoomProps) {
       <Text style={styles.roomId}>Room ID: {room.id}</Text>
       {movieItems}
       <Link href={`/room/add-movie-modal/${room.id}`} asChild>
-        <Pressable style={styles.addMovieButton}>
-          <Text>Add movie</Text>
+        <Pressable>
+          <Text style={styles.addMovieButton}>Add movie</Text>
         </Pressable>
       </Link>
     </ScrollView>
@@ -91,9 +91,7 @@ const createMovieItem = (
       vote(currentRoomId, movieId, currentUser, VoteType.UP)
         .then((response) => {
           if (response["success"]) {
-            console.log(roomMovies[movieId])
             roomMovies[movieId].add(currentUser)
-            console.log(roomMovies[movieId])
             setRoomMovies({ ...roomMovies })
           }
         });
@@ -143,6 +141,10 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   addMovieButton: {
-    paddingLeft: 16
+    textAlign: "center",
+    borderWidth: 1,
+    padding: 16,
+    color: "white",
+    backgroundColor: "blue"
   }
 });
