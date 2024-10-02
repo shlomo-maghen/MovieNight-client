@@ -50,3 +50,11 @@ export const removeMovieFromRoom = async (roomId: string, movieId: string, user:
   });
   return await response.json();
 }
+
+export const searchMovies = async (searchTerm: string) => {
+  console.log("searching movies")
+  let url = process.env.EXPO_PUBLIC_BACKEND_URL + "/search?term=" + searchTerm;
+  const response = await fetch(url);
+  return await response.json();
+}
+

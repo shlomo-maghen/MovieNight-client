@@ -9,11 +9,12 @@ export default class RoomMovie {
   }
 }
 
-export const fromJson = (
-  json: {
-    movie_id: string,
-    user_id: string,
-    user_display_name: string
-  }): RoomMovie => {
+export type RoomMovieJson = {
+  movie_id: string,
+  user_id: string,
+  user_display_name: string
+}
+
+export const fromJson = (json: RoomMovieJson): RoomMovie => {
   return new RoomMovie(json.movie_id, new User(json.user_id, json.user_display_name))
 }

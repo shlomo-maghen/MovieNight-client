@@ -1,11 +1,12 @@
 import Room from "@/models/Room"
 import MovieItem from "./MovieItem"
-import { Pressable, ScrollView, StyleSheet, Text } from "react-native"
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Link } from "expo-router"
 import User from "@/models/User"
 import RoomMovie from "@/models/RoomMovie"
-import { useState } from "react"
+import { ReactElement, useState } from "react"
 import { addMovieToRoom, removeMovieFromRoom } from "@/util/network"
+import MovieSearch from "./MovieSearch"
 
 type MovieRoomProps = {
   room: Room,
@@ -15,8 +16,9 @@ type MovieRoomProps = {
 type RoomMovies = Record<string, Set<User>>
 
 export default function MovieRoom(props: MovieRoomProps) {
-  const room = props.room
-  const [roomMovies, setRoomMovies] = useState<RoomMovies>(constructRoomMovies(room.movies))
+  const room = props.room;
+  const [roomMovies, setRoomMovies] = useState<RoomMovies>(constructRoomMovies(room.movies));
+  const [movieSearchMode, setMovieSearchMode] = useState(false);
 
   const sortedMovies =
     Object
@@ -38,19 +40,18 @@ export default function MovieRoom(props: MovieRoomProps) {
         setRoomMovies))
 
   return (
-    <ScrollView>
-      <Text style={styles.roomId}>Room ID: {room.id}</Text>
-      {movieItems}
-      <Link href={`/room/add-movie-modal/${room.id}`} asChild>
-        <Pressable>
-          <Text style={styles.addMovieButton}>Add movie</Text>
-        </Pressable>
-      </Link>
-    </ScrollView>
+    <View style={styles.container}>
+      <ScrollView style={styles.movieList}>
+        <Text style={styles.roomId}>Room ID: {room.id}</Text>
+        {movieItems}
+      </ScrollView>
+      {movieSearchMode && <MovieSearch />}
+      <Pressable onPress={() => setMovieSearchMode(!movieSearchMode)}>
+        <Text style={styles.addMovieButton}>{movieSearchMode ? "Done" : "Choose a movie"}</Text>
+      </Pressable>
+    </View>
   )
 }
-
-
 const createMovieItem = (
   movieId: string,
   users: User[],
@@ -58,7 +59,7 @@ const createMovieItem = (
   currentRoomId: string,
   roomMovies: RoomMovies,
   setRoomMovies: (room: RoomMovies) => void,
-) => {
+): ReactElement => {
   const displayNames: string[] = []
   const userIds: string[] = []
   users.map((user: User) => {
@@ -134,17 +135,32 @@ const constructRoomMovies = (roomMovieList: [RoomMovie]) => {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "green"
+  },
   roomId: {
     fontSize: 25,
     fontWeight: 'bold',
     margin: 10,
     textAlign: "center"
   },
+  movieList: {
+    borderColor: "red",
+    borderWidth: 1,
+  },
   addMovieButton: {
     textAlign: "center",
     borderWidth: 1,
     padding: 16,
     color: "white",
-    backgroundColor: "blue"
+    backgroundColor: "blue",
+    justifyContent: "flex-end",
+  },
+  movieSearch: {
+    borderWidth: 1,
   }
 });
