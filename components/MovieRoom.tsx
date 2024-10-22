@@ -45,7 +45,13 @@ export default function MovieRoom(props: MovieRoomProps) {
         <Text style={styles.roomId}>Room ID: {room.id}</Text>
         {movieItems}
       </ScrollView>
-      {movieSearchMode && <MovieSearch />}
+
+      {movieSearchMode && (
+        <View style={styles.movieSearch}>
+          <MovieSearch onResultClick={vote} />
+        </View>)
+      }
+
       <Pressable onPress={() => setMovieSearchMode(!movieSearchMode)}>
         <Text style={styles.addMovieButton}>{movieSearchMode ? "Done" : "Choose a movie"}</Text>
       </Pressable>
@@ -106,10 +112,6 @@ const createMovieItem = (
     voteAction={voteAction} />
 }
 
-enum VoteType {
-  UP, DOWN
-}
-
 const vote = async (roomId: string, movieId: string, user: User, voteType: VoteType) => {
   switch (voteType) {
     case VoteType.UP:
@@ -139,8 +141,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
-    borderWidth: 1,
-    borderColor: "green"
   },
   roomId: {
     fontSize: 25,
@@ -149,8 +149,6 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   movieList: {
-    borderColor: "red",
-    borderWidth: 1,
   },
   addMovieButton: {
     textAlign: "center",
@@ -161,6 +159,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   movieSearch: {
-    borderWidth: 1,
+    justifyContent: "flex-end",
   }
 });

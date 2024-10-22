@@ -1,10 +1,14 @@
 import Movie from '@/models/Movie';
+import User from '@/models/User';
 import { searchMovies } from '@/util/network';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native';
 
-export default function MovieSearch() {
+type MovieSearchProps = {
+  onResultClick: (roomId: string, movieId: string, user: User, voteType: VoteType) => void
+}
+export default function MovieSearch(props: MovieSearchProps) {
   const [searchTerm, setSearchTerm] = useState("")
   const [movies, setMovies] = useState<Movie[]>([])
 
@@ -17,7 +21,11 @@ export default function MovieSearch() {
   }, [searchTerm])
 
   const movieElements = movies.map(movie => {
-    return <Text key={movie.id}>{movie.title}</Text>
+    return (
+    <Pressable onPress={props.onResultClick()}>
+      <Text style={styles.result} key={movie.id}>{movie.title}</Text>
+    </Pressable>
+    )
   });
 
   return (
@@ -49,13 +57,17 @@ const search = (term: string, setMovies: (movies: Movie[]) => void) => {
 
 const styles = StyleSheet.create({
   searchBox: {
-    flex: 1,
+    marginLeft: 16,
     fontSize: 24
   },
   resultList: {
-    fontSize: 24,
+    paddingTop: 16,
+    paddingBottom: 16,
     borderWidth: 1,
-    borderColor: "red",
-    borderStyle: "dashed"
+    borderColor: "light-gray"
+  },
+  result: {
+    fontSize: 24,
+    paddingLeft: 16
   }
 })
